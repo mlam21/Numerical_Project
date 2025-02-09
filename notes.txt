@@ -1,0 +1,24 @@
+Pour le rapport discuter du côté minimal de l'architecture en jouant avec des enlèvements de bouts, présenter explcitement la loss,
+les paramètres d'apprentissages et le choix en terme de perfs le mieux, peut être avec des schedulers, ???
+
+graph de répartition des données avec seaborn,
+plot quelques images pour marquer les esprits
+
+Idée structure:
+I) Présentation des données, dev de fonctions de plots avec seaborn pour chaque
+classe jeu trai, val, test avec chacune des classes et plot de quelques exemples
+
+II) Préparation des datasets
+Genre data augmentation pourquoi pas et en plot quelques uns pour marquer les esprits
+Choix du split D1/D2, avec un mapping et des fonctions spécifiques de génération train, test, val D1/D2 en uniformisant
+
+III) Définition de la structure du réseau
+On choisit la structure qu'on veut, on va prendre des CNN pour faciliter les choses
+On présente la structure et le choix qui en a été fait, présentation du choix de la loss (categorical cross entropy avec défintion), choix du scheduler éventuellement avec et sans (cosine annihilinh loss???), choix de l'optimiseur (essayer avec Adam/SGD) peut être rapidement mentionner le principe
+Définiton des métriques choisies (on va prendre l'accuracy très explicite)
+
+IV) Entrainement sur D1 puis entrainement sur D2 avec monitoring de la loss et de l'accuracy:
+ labla on explique intuitivement la raison, plus simple pour le réseau 
+
+V) Entrainement suivant différentes proportions:
+On fait un custom loader avec un paramètre pCan yCa
