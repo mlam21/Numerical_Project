@@ -49,7 +49,7 @@ class CNNModel:
         else:
             raise ValueError("Model is not built. Call 'build_model()' first.")
 
-    def plot_training_curves(self) -> None:
+    def plot_training_curves(self, save_path: Path | None = None) -> None:
         if self.history is None:
             raise ValueError("Please train the model before!")
 
@@ -71,6 +71,9 @@ class CNNModel:
         plt.ylabel("Loss")
         plt.legend()
 
+        if save_path is not None:
+            plt.savefig(save_path)
+
         plt.show()
 
     def train(
@@ -83,10 +86,11 @@ class CNNModel:
         else:
             raise ValueError("Model is not built. Call 'build_model()' first.")
 
-    def test_model(self, test_data: tf.data.Dataset) -> None:
+    def test_model(self, test_data: tf.data.Dataset) -> tuple[float, float]:
         if self.model:
             test_loss, test_accuracy = self.model.evaluate(test_data)
             print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}")
+            return test_loss, test_accuracy
         else:
             raise ValueError("Model is not built. Call 'build_model()' first.")
 
@@ -95,7 +99,7 @@ if __name__ == "__main__":
     config = Config()
     d1_train, d2_train, d1_test, d2_test, class_names = merge_datasets(config)
 
-    cnn = CNNModel(input_shape=(28, 28, 1), num_classes=len(class_names))
+    cnn = CNNModel(config.input_shape, num_classes=len(class_names))
     cnn.build_model(config)
 
     cnn.train(train_dset=d1_train, val_dset=d1_test, epochs=config.epochs)

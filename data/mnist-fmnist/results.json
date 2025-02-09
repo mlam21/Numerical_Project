@@ -1,0 +1,31 @@
+{
+ "save_dir": "data/mnist-fmnist",
+ "config": {
+  "buffer_size": 10000,
+  "seed_value": 1,
+  "batch_size": 64,
+  "epochs": 5,
+  "loss": "sparse_categorical_crossentropy",
+  "optimizer": "adam",
+  "metrics": [
+   "accuracy"
+  ],
+  "dset_pair": [
+   "mnist",
+   "fashion_mnist"
+  ],
+  "input_shape": [
+   28,
+   28,
+   1
+  ]
+ },
+ "training_1_d1_accuracy": 0.9904999732971191,
+ "training_1_d1_loss": 0.0341283343732357,
+ "training_1_d2_accuracy": 0.0,
+ "training_1_d2_loss": 14.941672325134277,
+ "training_2_d1_accuracy": 0.0,
+ "training_2_d1_loss": 25.684654235839844,
+ "training_2_d2_accuracy": 0.9075000286102295,
+ "training_2_d2_loss": 0.2617347538471222
+}

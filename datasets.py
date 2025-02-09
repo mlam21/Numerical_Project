@@ -2,7 +2,6 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 from dataclasses import dataclass, field
 from enum import Enum
-
 from typing import Callable
 
 
@@ -27,7 +26,9 @@ class Config:
     loss: str = "sparse_categorical_crossentropy"
     optimizer: str = "adam"
     metrics: list[str] = field(default_factory=lambda: ["accuracy"])
+
     dset_pair: Dset_pairs = Dset_pairs.mnist_fmnist
+    input_shape: tuple[int, int, int] = field(default_factory=lambda: (28, 28, 1))
 
 
 # Define loading/preprocess functions for each available datasets
