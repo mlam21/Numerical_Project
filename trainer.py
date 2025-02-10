@@ -99,7 +99,7 @@ class CNNModel:
 
 
 if __name__ == "__main__":
-    config = Config(dset_pair=Dset_pairs.half_cifar10)
+    config = Config(dset_pair=Dset_pairs.half_cifar10, epochs=10)
     d1_train, d2_train, d1_test, d2_test, class_names = merge_datasets(config)
 
     cnn = CNNModel(config.input_shape, num_classes=len(class_names))

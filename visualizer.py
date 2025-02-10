@@ -40,6 +40,7 @@ def plot_class_distribution(
         color="skyblue",
     )
     plt.xlabel("Class Index")
+    plt.xticks([])  # Ugly when there's too many classes otherwise
     plt.ylabel("Frequency")
     plt.title(f"Class Distribution in Dataset {title}", fontsize=16)
     plt.grid(axis="y", linestyle="--", alpha=0.7)
@@ -113,7 +114,7 @@ if __name__ == "__main__":
 
     # Try experience replay with Half-cifar100
     er_train = experience_replay(d2_train, d1_train, 0.2)
-    visualize_images(er_train, class_names, title="D2 test")
+    visualize_images(er_train, class_names, title="Er train")
     plot_class_distribution(
         er_train, num_classes=len(class_names), title="Experience replay"
     )
