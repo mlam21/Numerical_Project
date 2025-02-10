@@ -1,12 +1,11 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-from datasets import Dset_pairs, merge_datasets, Config
-import rich
+from datasets import merge_datasets, Config
 
 
 def visualize_images(
-    dataset: tf.data.Dataset, class_names: dict[int, str], cmap="gray"
+    dataset: tf.data.Dataset, class_names: dict[int, str], cmap="gray", title="D1 train"
 ) -> None:
     dataset_iter = iter(dataset.take(1))
 
@@ -24,10 +23,14 @@ def visualize_images(
         ax[row, col].axis("off")
 
     fig.tight_layout()
+    fig.suptitle(title, fontsize=16)
+    fig.subplots_adjust(top=0.85)
     plt.show()
 
 
-def plot_class_distribution(dataset: tf.data.Dataset, num_classes: int) -> None:
+def plot_class_distribution(
+    dataset: tf.data.Dataset, num_classes: int, title: str = "D1 train"
+) -> None:
     class_counts = np.zeros(num_classes, dtype=int)
     total = 0
 
@@ -36,8 +39,6 @@ def plot_class_distribution(dataset: tf.data.Dataset, num_classes: int) -> None:
         for label in labels:
             class_counts[label] += 1
             total += 1
-
-    rich.print(total)
 
     plt.figure(figsize=(8, 5))
     plt.bar(
@@ -48,7 +49,7 @@ def plot_class_distribution(dataset: tf.data.Dataset, num_classes: int) -> None:
     )
     plt.xlabel("Class Index")
     plt.ylabel("Frequency")
-    plt.title("Class Distribution in Dataset")
+    plt.title(f"Class Distribution in Dataset {title}", fontsize=16)
     plt.grid(axis="y", linestyle="--", alpha=0.7)
     plt.show()
 
@@ -57,14 +58,14 @@ if __name__ == "__main__":
     config = Config()
     d1_train, d2_train, d1_test, d2_test, class_names = merge_datasets(config)
 
-    visualize_images(d1_train, class_names)
-    visualize_images(d2_train, class_names)
+    visualize_images(d1_train, class_names, title="D1 train")
+    visualize_images(d2_train, class_names, title="D2 train")
 
-    visualize_images(d1_test, class_names)
-    visualize_images(d2_test, class_names)
+    visualize_images(d1_test, class_names, title="D1 test")
+    visualize_images(d2_test, class_names, title="D2 test")
 
-    plot_class_distribution(d1_train, num_classes=len(class_names))
-    plot_class_distribution(d2_train, num_classes=len(class_names))
+    plot_class_distribution(d1_train, num_classes=len(class_names), title="D1 train")
+    plot_class_distribution(d2_train, num_classes=len(class_names), title="D2 train")
 
-    plot_class_distribution(d1_test, num_classes=len(class_names))
-    plot_class_distribution(d2_test, num_classes=len(class_names))
+    plot_class_distribution(d1_test, num_classes=len(class_names), title="D1 test")
+    plot_class_distribution(d2_test, num_classes=len(class_names), title="D2 test")

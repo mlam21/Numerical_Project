@@ -1,4 +1,4 @@
-from datasets import Config, merge_datasets, Dset_pairs
+from datasets import Config, merge_datasets
 from pathlib import Path
 import tensorflow as tf
 import matplotlib.pyplot as plt
