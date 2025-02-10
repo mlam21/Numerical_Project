@@ -1,4 +1,4 @@
-from datasets import Config, merge_datasets
+from datasets import Config, Dset_pairs, merge_datasets
 from pathlib import Path
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -77,7 +77,10 @@ class CNNModel:
         plt.show()
 
     def train(
-        self, train_dset: tf.data.Dataset, val_dset: tf.data.Dataset, epochs: int
+        self,
+        train_dset: tf.data.Dataset,
+        val_dset: tf.data.Dataset,
+        epochs: int,
     ) -> None:
         if self.model:
             self.history = self.model.fit(
@@ -96,7 +99,7 @@ class CNNModel:
 
 
 if __name__ == "__main__":
-    config = Config()
+    config = Config(dset_pair=Dset_pairs.half_cifar10)
     d1_train, d2_train, d1_test, d2_test, class_names = merge_datasets(config)
 
     cnn = CNNModel(config.input_shape, num_classes=len(class_names))

@@ -3,10 +3,11 @@ import random
 import tensorflow as tf
 import json
 import numpy as np
-from datasets import Config, merge_datasets
+from datasets import Config, Dset_pairs, merge_datasets, experience_replay
 from pathlib import Path
 from trainer import CNNModel
 from dataclasses import dataclass, asdict
+import rich
 
 
 # To ensure reproductiblity
@@ -55,11 +56,11 @@ class Results:
 
 
 # Load config, dsets and and the model
-config = Config()
-set_seed(config.seed_value)
+config = Config(dset_pair=Dset_pairs.half_cifar10, epochs=10)
+set_seed(1234)
 d1_train, d2_train, d1_test, d2_test, merged_class_names = merge_datasets(config)
 
-results = Results(config=config, save_dir=Path("data/mnist-fmnist"))
+results = Results(config=config, save_dir=Path("data/half-cifar10"))
 os.makedirs(results.save_dir, exist_ok=True)
 
 cnn = CNNModel(
@@ -72,7 +73,7 @@ cnn.build_model(config)
 cnn.train(train_dset=d1_train, val_dset=d1_test, epochs=config.epochs)
 
 # Save the model, nomenclature for weights D1-D2-proportion in the dset
-cnn.save_weights(results.save_dir / "mnist-fmnist-100-0.weights.h5")
+cnn.save_weights(results.save_dir / "half-cifar10-100-0.weights.h5")
 cnn.plot_training_curves(save_path=results.save_dir / "training_1_curves.png")
 
 # Test model on D1-test and D2-test, obviously catastrophic performance on D2
@@ -87,8 +88,8 @@ results.training_1_d2_loss = d2_test_loss
 # Retrain it on D2 this time (with D2-val)
 cnn.train(train_dset=d2_train, val_dset=d2_test, epochs=config.epochs)
 
-# Save the model, nomenclature for weights D1-D2-D1-proportion in the dset
-cnn.save_weights(results.save_dir / "mnist-fmnist-0-100.weights.h5")
+# Save the model, nomenclature for weights p in the dset
+cnn.save_weights(results.save_dir / f"half-cifar10-{int(config.p * 100)}.weights.h5")
 cnn.plot_training_curves(save_path=results.save_dir / "training_2_curves.png")
 
 # Test model on D1-test and D2-test
@@ -102,3 +103,55 @@ results.training_2_d2_loss = d2_test_loss
 
 # Saving results
 results.save()
+rich.print(results)
+
+
+# ------------------------------- Now we use experience replay with cifar10 -------------------------------
+# Same as before, loading the config
+config = Config(dset_pair=Dset_pairs.half_cifar10, p=0.2, epochs=10)
+set_seed(1234)
+d1_train, d2_train, d1_test, d2_test, merged_class_names = merge_datasets(config)
+
+results = Results(config=config, save_dir=Path("data/half-cifar10-with-er"))
+os.makedirs(results.save_dir, exist_ok=True)
+
+cnn = CNNModel(
+    config.input_shape,
+    len(merged_class_names),
+)
+cnn.build_model(config)
+
+# First training step, onyl done on D1
+cnn.train(train_dset=d1_train, val_dset=d1_test, epochs=config.epochs)
+
+# Test model on D1-test and D2-test, obviously catastrophic performance on D2
+d1_test_loss, d1_test_accuracy = cnn.test_model(test_data=d1_test)
+d2_test_loss, d2_test_accuracy = cnn.test_model(test_data=d2_test)
+
+results.training_1_d1_accuracy = d1_test_accuracy
+results.training_1_d1_loss = d1_test_loss
+results.training_1_d2_accuracy = d2_test_accuracy
+results.training_1_d2_loss = d2_test_loss
+
+# Apply experience replay
+mixed_train_dset = experience_replay(d2_train, d1_train, p=config.p)
+
+# Apply the second training phase
+cnn.train(train_dset=mixed_train_dset, val_dset=d2_test, epochs=config.epochs)
+
+# Save the model, nomenclature for weights p in the dset
+cnn.save_weights(results.save_dir / f"half-cifar10-{int(config.p * 100)}.weights.h5")
+cnn.plot_training_curves(save_path=results.save_dir / "training_2_curves.png")
+
+# Finally retest the model on D1 and D2 test
+d1_test_loss, d1_test_accuracy = cnn.test_model(test_data=d1_test)
+d2_test_loss, d2_test_accuracy = cnn.test_model(test_data=d2_test)
+
+results.training_2_d1_accuracy = d1_test_accuracy
+results.training_2_d1_loss = d1_test_loss
+results.training_2_d2_accuracy = d2_test_accuracy
+results.training_2_d2_loss = d2_test_loss
+
+# Saving results
+results.save()
+rich.print(results)

@@ -1,0 +1,25 @@
+{
+ "save_dir": "data/half-cifar10-with-er",
+ "config": {
+  "batch_size": 64,
+  "epochs": 10,
+  "loss": "sparse_categorical_crossentropy",
+  "optimizer": "adam",
+  "metrics": [
+   "accuracy"
+  ],
+  "dset_pair": [
+   "cifar10",
+   "cifar10"
+  ],
+  "p": 0.2
+ },
+ "training_1_d1_accuracy": 0.7757999897003174,
+ "training_1_d1_loss": 0.7165040969848633,
+ "training_1_d2_accuracy": 0.0,
+ "training_1_d2_loss": 18.313398361206055,
+ "training_2_d1_accuracy": 0.46380001306533813,
+ "training_2_d1_loss": 2.380610466003418,
+ "training_2_d2_accuracy": 0.8428000211715698,
+ "training_2_d2_loss": 0.603797435760498
+}
