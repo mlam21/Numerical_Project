@@ -46,14 +46,11 @@ class Config:
 
     @property
     def half_dset(self) -> bool:
-        if self.dset_pair in [
+        return self.dset_pair in [
             Dset_pairs.half_cifar10,
             Dset_pairs.half_cifar100,
             Dset_pairs.half_mnist,
-        ]:
-            return True
-
-        return False
+        ]
 
 
 # Define loading/preprocess functions for each available datasets

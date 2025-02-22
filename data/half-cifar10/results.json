@@ -14,12 +14,12 @@
   ],
   "p": 1.0
  },
- "training_1_d1_accuracy": 0.7757999897003174,
- "training_1_d1_loss": 0.7165040969848633,
+ "training_1_d1_accuracy": 0.772599995136261,
+ "training_1_d1_loss": 0.7040999531745911,
  "training_1_d2_accuracy": 0.0,
- "training_1_d2_loss": 18.313398361206055,
+ "training_1_d2_loss": 17.967052459716797,
  "training_2_d1_accuracy": 0.0,
- "training_2_d1_loss": 18.435081481933594,
- "training_2_d2_accuracy": 0.8140000104904175,
- "training_2_d2_loss": 0.6274719834327698
+ "training_2_d1_loss": 20.487964630126953,
+ "training_2_d2_accuracy": 0.873199999332428,
+ "training_2_d2_loss": 0.42841407656669617
 }
